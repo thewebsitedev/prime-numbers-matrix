@@ -90,38 +90,40 @@ class PrimeMatrix
      * @return array
      */
     public function generate_prime_numbers() {
+        // proceed only if the input is greater than 0
+        if ($this->number > 0) {
 
-        $n = $this->number;
-    
-        // Calculate an upper limit for the range within which to search for prime numbers.
-        $upperLimit = ($n < 6) ? 15 : intval($n * (log($n) + log(log($n))));
-    
-        // Initialize an array of size $upperLimit + 1, filled with the value 'true'.
-        $prime = array_fill(0, $upperLimit + 1, true);
-    
-        // Use the Sieve of Eratosthenes algorithm to identify prime numbers.
-        for ($p = 2; $p * $p <= $upperLimit; $p++) {
-            if ($prime[$p]) {
-                for ($i = $p * $p; $i <= $upperLimit; $i += $p) {
-                    $prime[$i] = false;
+            $n = $this->number;
+        
+            // Calculate an upper limit for the range within which to search for prime numbers.
+            $upperLimit = ($n < 6) ? 15 : intval($n * (log($n) + log(log($n))));
+        
+            // Initialize an array of size $upperLimit + 1, filled with the value 'true'.
+            $prime = array_fill(0, $upperLimit + 1, true);
+        
+            // Use the Sieve of Eratosthenes algorithm to identify prime numbers.
+            for ($p = 2; $p * $p <= $upperLimit; $p++) {
+                if ($prime[$p]) {
+                    for ($i = $p * $p; $i <= $upperLimit; $i += $p) {
+                        $prime[$i] = false;
+                    }
                 }
             }
-        }
-    
-        // Reset the primes array to collect new prime numbers.
-        $this->prime_numbers = [];
-    
-        // Iterate over the range to collect the prime numbers.
-        for ($p = 2; $p <= $upperLimit; $p++) {
-            if ($prime[$p]) {
-                $this->prime_numbers[] = $p;
-                // If the desired number of prime numbers is reached, exit the loop.
-                if (count($this->prime_numbers) >= $n) {
-                    break;
+        
+            // Reset the primes array to collect new prime numbers.
+            $this->prime_numbers = [];
+        
+            // Iterate over the range to collect the prime numbers.
+            for ($p = 2; $p <= $upperLimit; $p++) {
+                if ($prime[$p]) {
+                    $this->prime_numbers[] = $p;
+                    // If the desired number of prime numbers is reached, exit the loop.
+                    if (count($this->prime_numbers) >= $n) {
+                        break;
+                    }
                 }
             }
+
         }
     }
-    
-    
 }
