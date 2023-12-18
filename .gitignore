@@ -1,0 +1,4 @@
+node_modules
+.phpunit*
+vendor
+.DS_Store
