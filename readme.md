@@ -32,3 +32,6 @@ This is a simple program that prints a multiplication table of the first N prime
 
 1. Navigate to the project root and run `vendor/bin/phpunit` to run the PHP tests [Unit & Integration tests].
 2. Navigate to the project root and run `npm run test` to run the JS tests [End-to-end tests].
+
+
+The current implementaton is a bit memory intensive and slow for large numbers. It can be further improved by using a more efficient algorithm like segmented sieve of Eratosthenes. And for very large calculations it can be further improved by computing in chunks.
