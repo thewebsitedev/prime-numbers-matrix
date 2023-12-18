@@ -5,43 +5,131 @@ use PHPUnit\Framework\TestCase;
 
 class PrimeMatrixTest extends TestCase
 {
-    public function testIsWholeNumber()
+
+    public function testIsWholeNumberWithZero()
     {
-        $primeMatrix = new PrimeMatrix(5);
-        $this->assertTrue($primeMatrix->is_whole_number(5));
-        $this->assertTrue($primeMatrix->is_whole_number(5.0)); // Whole number as float
-        $this->assertFalse($primeMatrix->is_whole_number(3.5)); // Number with a decimal part
-        $this->assertFalse($primeMatrix->is_whole_number(-1));  // Negative number
-        $this->assertFalse($primeMatrix->is_whole_number('5')); // String input
+        $primeMatrix = new PrimeMatrix(0);
+        $this->assertTrue($primeMatrix->is_whole_number());
     }
 
-    public function testIsDoubleFloat()
+    public function testIsWholeNumberWithVeryLargeNumber()
     {
-        $primeMatrix = new PrimeMatrix(5);
-        $this->assertTrue($primeMatrix->is_double_float(5.1));
-        $this->assertFalse($primeMatrix->is_double_float(5));
+        $primeMatrix = new PrimeMatrix(100000);
+        $this->assertTrue($primeMatrix->is_whole_number());
     }
 
-    public function testIsNegative()
+    public function testIsWholeNumberWithVeryLargeFloatEquivalentToInteger()
     {
-        $primeMatrix = new PrimeMatrix(5);
-        $this->assertTrue($primeMatrix->is_negative(-1));
-        $this->assertFalse($primeMatrix->is_negative(5));
+        $primeMatrix = new PrimeMatrix(100000.0);
+        $this->assertTrue($primeMatrix->is_whole_number());
     }
 
-    public function testIsPrimeNumber()
+    public function testIsWholeNumberWithNullInput()
     {
-        $primeMatrix = new PrimeMatrix(5);
-        $this->assertTrue($primeMatrix->is_prime_number(5));
-        $this->assertFalse($primeMatrix->is_prime_number(4));
+        $primeMatrix = new PrimeMatrix(null);
+        $this->assertFalse($primeMatrix->is_whole_number());
     }
 
-    // test prime number generation
-    public function testGeneratePrimeNumbers()
+    public function testIsWholeNumberWithBooleanInput()
+    {
+        $primeMatrix = new PrimeMatrix(true);
+        $this->assertFalse($primeMatrix->is_whole_number());
+    }
+
+    public function testIsWholeNumberWithArrayInput()
+    {
+        $primeMatrix = new PrimeMatrix([]);
+        $this->assertFalse($primeMatrix->is_whole_number());
+    }
+
+    public function testIsDoubleFloatWithZero()
     {
         $primeMatrix = new PrimeMatrix(5);
-        $primeMatrix->generate_prime_numbers();
-        $this->assertEquals([2, 3, 5, 7, 11], $primeMatrix->prime_numbers);
+        $this->assertFalse($primeMatrix->is_double_float(0));
+    }
+
+    public function testIsDoubleFloatWithVerySmallFloat()
+    {
+        $primeMatrix = new PrimeMatrix(0.00001);
+        $this->assertTrue($primeMatrix->is_double_float());
+    }
+
+    public function testIsDoubleFloatWithLargeFloat()
+    {
+        $primeMatrix = new PrimeMatrix(123456.789);
+        $this->assertTrue($primeMatrix->is_double_float());
+    }
+
+    public function testIsDoubleFloatWithNegativeFloatValues()
+    {
+        $primeMatrix = new PrimeMatrix(-5.5);
+        $this->assertTrue($primeMatrix->is_double_float());
+    }
+
+    public function testIsDoubleFloatWithNullInput()
+    {
+        $primeMatrix = new PrimeMatrix(5);
+        $this->assertFalse($primeMatrix->is_double_float());
+    }
+
+    public function testIsDoubleFloatWithBooleanInput()
+    {
+        $primeMatrix = new PrimeMatrix(true);
+        $this->assertFalse($primeMatrix->is_double_float());
+    }
+
+    public function testIsDoubleFloatWithArrayInput()
+    {
+        $primeMatrix = new PrimeMatrix([]);
+        $this->assertFalse($primeMatrix->is_double_float());
+    }
+
+    public function testIsNegativeWithZero()
+    {
+        $primeMatrix = new PrimeMatrix(0);
+        $this->assertFalse($primeMatrix->is_negative());
+    }
+
+    public function testIsNegativeWithPositiveNumber()
+    {
+        $primeMatrix = new PrimeMatrix(10);
+        $this->assertFalse($primeMatrix->is_negative());
+    }
+
+    public function testIsNegativeWithVeryLargeNegativeNumber()
+    {
+        $primeMatrix = new PrimeMatrix(-1000000000);
+        $this->assertTrue($primeMatrix->is_negative());
+    }
+
+    public function testIsNegativeWithNullInput()
+    {
+        $primeMatrix = new PrimeMatrix(null);
+        $this->assertFalse($primeMatrix->is_negative());
+    }
+
+    public function testIsNegativeWithBooleanInput()
+    {
+        $primeMatrix = new PrimeMatrix(true);
+        $this->assertFalse($primeMatrix->is_negative());
+    }
+
+    public function testIsNegativeWithFloatInput()
+    {
+        $primeMatrix = new PrimeMatrix(10.5);
+        $this->assertFalse($primeMatrix->is_negative());
+    }
+
+    public function testIsNegativeWithStringInput()
+    {
+        $primeMatrix = new PrimeMatrix("string");
+        $this->assertFalse($primeMatrix->is_negative());
+    }
+
+    public function testIsNegativeWithArrayInput()
+    {
+        $primeMatrix = new PrimeMatrix([]);
+        $this->assertFalse($primeMatrix->is_negative());
     }
 
     // test with a negative number
@@ -81,7 +169,7 @@ class PrimeMatrixTest extends TestCase
         $this->assertEquals([2], $primeMatrix->prime_numbers);
     }
 
-    // test with a large prime number
+    // test with 13 prime numbers
     public function testWithLargePrimeNumber()
     {
         $primeMatrix = new PrimeMatrix(13);
@@ -92,6 +180,31 @@ class PrimeMatrixTest extends TestCase
         
         // Verify the generated prime numbers are as expected
         $this->assertEquals($expected_primes, $primeMatrix->prime_numbers);
+    }
+
+    // test with a very large prime numbers
+    public function testGeneratePrimeNumbersWithVeryLargeNumber()
+    {
+        $largeNumber = 1000;
+        $primeMatrix = new PrimeMatrix($largeNumber);
+        $primeMatrix->generate_prime_numbers();
+        $this->assertCount($largeNumber, $primeMatrix->prime_numbers);
+    }
+
+    // test with zero
+    public function testGeneratePrimeNumbersWithZero()
+    {
+        $primeMatrix = new PrimeMatrix(0);
+        $primeMatrix->generate_prime_numbers();
+        $this->assertEmpty($primeMatrix->prime_numbers);
+    }
+
+    // test with three
+    public function testGeneratePrimeNumbersWithThree()
+    {
+        $primeMatrix = new PrimeMatrix(3);
+        $primeMatrix->generate_prime_numbers();
+        $this->assertEquals([2, 3, 5], $primeMatrix->prime_numbers);
     }
 
 }

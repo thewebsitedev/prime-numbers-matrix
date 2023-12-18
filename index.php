@@ -9,7 +9,7 @@
     <title>Prime Numbers Matrix</title>
 </head>
 
-<body class="bg-gray-900">
+<body class="bg-gray-900 text-white">
 
     <?php
     // get the number from the query string
